@@ -1,18 +1,23 @@
 import React from 'react';
 import moment from 'moment';
 import { ResponsiveLine } from '@nivo/line';
-import {  Spinner } from 'react-bootstrap';
+import {  Spinner, Container, Row, Col, Card } from 'react-bootstrap';
 import { useTemperature, useHumidity, usePressure } from '../api/sensorData';
 import commonLineProps from '../utils/commonLineProps';
 import useSunData from '../api/sunData';
 
 const timeStart = moment('2020-06-25T19:00:00-0500').toDate();
 
+const fetchParams = {
+  window: 3600,
+  timeStart
+};
+
 const Dashboard = () => {
-  const temperatureData = useTemperature({ window: 900, timeStart });
-  const pressureData = usePressure({ window: 900, timeStart });
-  const humidityData = useHumidity({ window: 900, timeStart });
-  const sunData = useSunData({ timeStart });
+  const { feedData: temperatureData, liveData: tempLive } = useTemperature(fetchParams);
+  const { feedData: pressureData, liveData: pressLive } = usePressure(fetchParams);
+  const { feedData: humidityData, liveData: humidLive } = useHumidity(fetchParams);
+  const sunData = useSunData(timeStart);
 
   if (!temperatureData || !pressureData || !humidityData) {
     return (
@@ -32,6 +37,25 @@ const Dashboard = () => {
 
   return (
     <div className="text-center my-5">
+      <Container>
+        <Row>
+          {
+            [{ data: tempLive, unit: '°F'}, { data: pressLive, unit: '%'}, { data: humidLive, unit: 'hPa'}]
+            .map(({ data, unit}) => (
+              <Col key={unit}>
+                <Card>
+                  <Card.Body>
+                    <div className="d-flex justify-content-center align-items-center">
+                      <div style={{ fontSize: '2em', fontWeight: 'bold'}}>{ data ? data : '-' }</div>
+                      <div className="ml-3" style={{fontWeight: 'normal', fontSize: '1.3em'}}>{ unit }</div>
+                    </div>
+                  </Card.Body>
+                </Card>
+              </Col>
+            ))
+          }
+        </Row>
+      </Container>
       <div className="w-100" style={{height: '500px'}}>
         <ResponsiveLine
           { ...commonLineProps(sunData) }

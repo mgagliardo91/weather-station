@@ -18,10 +18,7 @@ const fetchSunData = async (date) => {
 const defaultTimeStart = moment().subtract(1, 'days').toDate();
 const defaultTimeEnd = moment().toDate();
 
-const useSunData = ({
-  timeStart = defaultTimeStart,
-  timeEnd = defaultTimeEnd,
-} = {}) => {
+const useSunData = (timeStart = defaultTimeStart, timeEnd = defaultTimeEnd) => {
   const [sunData, setSunData] = useState();
 
   const dateList = useMemo(() => {

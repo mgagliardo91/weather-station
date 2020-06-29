@@ -3,7 +3,7 @@ import ContxtSdk from '@ndustrial/contxt-sdk';
 const contxtSdk = new ContxtSdk({
     config: {
         auth: {
-            clientId: 'Jlrp6SjjpTP7RlrNi8exIkCxeuWZmRDW',
+            clientId: 'ENfYXBnFrFlNgnRffIr64RqTAguFYidQ',
             customModuleConfigs: {
                 contxtAuth: {
                   env: 'production'

@@ -13,14 +13,14 @@ const TimeOfDayArea = (sunData) => ({ series, xScale, yScale, innerHeight }) => 
     if (sunData[startOfDay]) {
       const { sunrise, sunset } = sunData[startOfDay];
       return {
-        sunriseHr: moment(sunrise).hour(),
-        sunsetHr: moment(sunset).hour(),
+        sunrise: moment(sunrise),
+        sunset: moment(sunset),
       }
     }
 
     return {
-      sunriseHr: 7,
-      sunsetHr: 19,
+      sunrise: moment(startOfDay).hour(7).minute(0).second(0),
+      sunset: moment(startOfDay).hour(19).minute(0).second(0),
     }
   }, (date) => `${date.year()}-${date.month()}-${date.day()}`);
 
@@ -28,8 +28,8 @@ const TimeOfDayArea = (sunData) => ({ series, xScale, yScale, innerHeight }) => 
   let currentAreaSet = [];
   for (let i = 0; i < dataSeries.length; i++) {
     const currentDateTime = moment(dataSeries[i].data.x);
-    const { sunriseHr, sunsetHr } = sunDataCache(currentDateTime);
-    const isCurrentDateDayTime = currentDateTime.hour() >= sunriseHr && currentDateTime.hour() < sunsetHr;
+    const { sunrise, sunset } = sunDataCache(currentDateTime);
+    const isCurrentDateDayTime = currentDateTime.isAfter(sunrise) && currentDateTime.isBefore(sunset);
     
     if (typeof isDayTime !== 'undefined' && isCurrentDateDayTime !== isDayTime) {
       data.push({ isDayTime, series: [...currentAreaSet, dataSeries[i]] });
