@@ -6,7 +6,7 @@ import { Defs } from '@nivo/core'
 
 const TimeOfDayArea = (sunData) => ({ series, xScale, yScale, innerHeight }) => {
   const data = [];
-  const dataSeries = series[0].data;
+  const dataSeries = series[1].data;
 
   const sunDataCache = memoize((date) => {
     const startOfDay = moment(date).startOf('day');

@@ -21,6 +21,7 @@ const useInterval = (callback, delay) => {
 }
 
 const useFormatOutput = (fieldName, config) => {
+  const [lastUpdate, setLastUpdate] = useState(moment());
   const [liveData, setLiveData] = useState();
   const { feedOutput, fetchOutput } = useFeedOutput(fieldName, config);
   const [feedData, setFeedData] = useState();
@@ -77,11 +78,13 @@ const useFormatOutput = (fieldName, config) => {
     });
 
     setLiveData(data.records.length ? parseFloat(data.records[0].value).toFixed(2) : feedData[0].y)
+    setLastUpdate(moment());
   }, 30000);
 
   return {
     feedData,
-    liveData
+    liveData,
+    lastUpdate
   }
 };
 
